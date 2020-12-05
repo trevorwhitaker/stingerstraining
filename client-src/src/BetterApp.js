@@ -13,7 +13,7 @@ const BetterApp = () => {
       },
     };
     console.log(options)
-    fetch('http://localhost:3009/test', options)
+    fetch('http://localhost:8080/test', options)
       .then((response) => {
         if (response.ok) {
           response
