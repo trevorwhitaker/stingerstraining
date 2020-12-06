@@ -10,17 +10,12 @@ app.use(express.static(path.join(__dirname, 'client-src', 'build')));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.sendFile(path.join(__dirname, 'client-src', 'build', 'index.html'));
 })
 
 app.get('/test', (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.json({poop: 'poop'});
+  res.json({poop: 'poop'})
 })
-
-app.get('/home', function (req, res) {
-  res.sendFile(path.join(__dirname, 'client-src', 'build', 'index.html'));
-});
 
 app.listen(process.env.PORT || 8080, () => {
   console.log('Server started on ', process.env.PORT || '8080',)
