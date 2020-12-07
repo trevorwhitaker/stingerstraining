@@ -10,6 +10,7 @@ const app = express()
 app.use(express.static(path.join(__dirname, 'client-src', 'build')));
 app.use(express.json());
 app.use("/users", require("./routes/userRouter"));
+app.use("/drills", require("./routes/drillRouter"));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'client-src', 'build', 'index.html'));

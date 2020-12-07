@@ -1,11 +1,20 @@
 const router = require("express").Router();
 const Drill = require("../models/drillModel");
 const bcrypt = require("bcryptjs");
-const auth = require("../middleware/auth").adminAuth;
+const auth = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
 
 router.post("/create", auth, async (req, res) => {
     try {
+        const user = await User.findById(req.user);
+
+        if (!user || user.role != "admin")
+        {
+            return res
+            .status(401)
+            .json({ msg: "Not authorized." });
+        }
+
         const { name, description, category } = req.body;
 
         if (!name || !description || !category) {
@@ -13,7 +22,7 @@ router.post("/create", auth, async (req, res) => {
         }
 
         const existingDrill = await Drill.findOne({name: name});
-        if (existingUser) {
+        if (existingDrill) {
             return res.status(400).json({msg: "Drill already exists"});
         }
 
@@ -23,9 +32,9 @@ router.post("/create", auth, async (req, res) => {
             category
         });
 
-        const newDrill = await newUser.save();
+        const savedDrill = await newDrill.save();
 
-        res.json(newDrill);
+        res.json(savedDrill);
     }
     catch (error) {
         res.status(500).json({err: error.message});
@@ -64,12 +73,19 @@ router.get("/", async (req, res) => {
 
 router.delete("/delete", auth, async (req, res) => {
     try {
-      const deletedUser = await User.findByIdAndDelete(req.user);
-      res.json(deletedUser);
+        const user = await User.findById(req.user);
+
+        if (!user || user.role != "admin")
+        {
+            return res
+            .status(401)
+            .json({ msg: "Not authorized." });
+        }
+      const deletedDrill = await Drill.findByIdAndDelete(req.drillId);
+      res.json(deletedDrill);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
 });
-
 
 module.exports = router;
