@@ -5,10 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
+    "start": "npm run setup && node app.js",
     "start:dev": "nodemon app.js",
-    "setup": "npm install && cd client-src && npm install",
-    "build": "cd client-src && npm run build"
+    "setup": "npm run client:install && npm run client:build",
+    "client:install": "npm --prefix client-src install",
+    "client:build": "npm --prefix client-src run build",
+    "client:start": "npm --prefix client-src run start"
   },
   "engines": {
     "node": "^14.x"

@@ -1,0 +1,17 @@
+@import '~rsuite/dist/styles/rsuite-default.css';
+@import '~bootstrap/scss/bootstrap';
+
+.App {
+  // .header {
+  //   .navbar-brand {
+  //     display
+  //   }
+  // }
+  .main-section {
+    display: flex;
+    flex-direction: row;
+    .side-nav {
+      width: 250px;
+    }
+  }
+}

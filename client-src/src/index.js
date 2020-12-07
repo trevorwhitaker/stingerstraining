@@ -2,13 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import BetterApp from './BetterApp';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <BetterApp />
-  </React.StrictMode>,
+  <App />,
   document.getElementById('root')
 );
 

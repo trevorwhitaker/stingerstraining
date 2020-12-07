@@ -5,14 +5,14 @@
 Open a terminal on the root folder:
 
 ``` bash
-npm run setup
+npm install
+npm run client:install
 npm run start:dev
 ```
 
 In a new terminal:
 ``` bash
-cd client-src
-npm run start
+npm run client:start
 ```
 
 In a browser, go to `http://localhost:3000` to start developing, all files are auto rebuilt on change.
@@ -20,7 +20,7 @@ In a browser, go to `http://localhost:3000` to start developing, all files are a
 ## For production builds:
 
 ``` bash
-npm run build
+npm run client:build
 ```
 
 ## Ports:

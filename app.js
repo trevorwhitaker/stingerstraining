@@ -6,8 +6,10 @@ require('dotenv').config();
 
 const app = express()
 
+// middleware
 app.use(express.static(path.join(__dirname, 'client-src', 'build')));
 app.use(express.json());
+app.use("/users", require("./routes/userRouter"));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'client-src', 'build', 'index.html'));
@@ -26,8 +28,8 @@ mongoose.connect(process.env.MONGODB_CONN_STRING, {
   useUnifiedTopology: true,
   useCreateIndex: true
 }, (err) => {
-  if (err) throw error;
+  if (err) {
+    throw new Error(err);
+  }
   console.log("Mongodb connected");
 });
-
-app.use("/users", require("./routes/userRouter"));
