@@ -1,0 +1,14 @@
+@media all and (min-width: 480px) {
+  .Register {
+    padding: 60px 0;
+  }
+
+  .registration-success, .registration-error, .logged-in {
+    text-align: center;
+  }
+
+  .Register form {
+    margin: 0 auto;
+    max-width: 320px;
+  }
+}

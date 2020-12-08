@@ -1,12 +1,21 @@
 @import '~rsuite/dist/styles/rsuite-default.css';
 @import '~bootstrap/scss/bootstrap';
+@import '~carbon-components/scss/components/skeleton/_skeleton-placeholder';
 
 .App {
-  // .header {
-  //   .navbar-brand {
-  //     display
-  //   }
-  // }
+  .logged-out,.no-login {
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  .loading-skeleton-container {
+    display: flex;
+    justify-content: center;
+    .loading-skeleton-1 {
+      width: 50vw;
+    }
+  }
+
   .main-section {
     display: flex;
     flex-direction: row;

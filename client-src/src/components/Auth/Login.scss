@@ -3,6 +3,10 @@
     padding: 60px 0;
   }
 
+  .login-success, .login-error, .logged-in {
+    text-align: center;
+  }
+
   .Login form {
     margin: 0 auto;
     max-width: 320px;
