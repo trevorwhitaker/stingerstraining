@@ -17,6 +17,10 @@ router.post("/create", auth, async (req, res) => {
 
         const { name, description, category } = req.body;
 
+        if (!req.files || Object.keys(req.files).length === 0) {
+          return res.status(400).json({msg: 'No files were uploaded.'});
+        }
+
         if (!name || !description || !category) {
             return res.status(400).json({msg: "Missing fields"});
         }
@@ -33,6 +37,9 @@ router.post("/create", auth, async (req, res) => {
         });
 
         const savedDrill = await newDrill.save();
+
+        let video = req.files.video;
+        await video.mv("videos/" + savedDrill._id + ".mp4");
 
         res.json(savedDrill);
     }

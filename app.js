@@ -1,7 +1,7 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
+const fileUpload = require('express-fileupload');
 require('dotenv').config();
 
 const app = express()
@@ -9,6 +9,7 @@ const app = express()
 // middleware
 app.use(express.static(path.join(__dirname, 'client-src', 'build')));
 app.use(express.json());
+app.use(fileUpload());
 app.use("/users", require("./routes/userRouter"));
 app.use("/drills", require("./routes/drillRouter"));
 
