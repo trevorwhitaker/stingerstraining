@@ -3,6 +3,7 @@ const Drill = require("../models/drillModel");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
+const path = require('path');
 
 router.post("/create", auth, async (req, res) => {
     try {
@@ -39,7 +40,7 @@ router.post("/create", auth, async (req, res) => {
         const savedDrill = await newDrill.save();
 
         let video = req.files.video;
-        await video.mv("videos/" + savedDrill._id + ".mp4");
+        await video.mv(process.env.VIDEOS_PATH + "/" + savedDrill._id + path.extname(video.name));
 
         res.json(savedDrill);
     }
