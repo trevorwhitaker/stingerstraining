@@ -1,8 +1,7 @@
 const router = require("express").Router();
 const Drill = require("../models/drillModel");
-const bcrypt = require("bcryptjs");
+const ffmpeg = require('fluent-ffmpeg');
 const auth = require("../middleware/auth");
-const jwt = require("jsonwebtoken");
 const path = require('path');
 
 router.post("/create", auth, async (req, res) => {
@@ -40,7 +39,15 @@ router.post("/create", auth, async (req, res) => {
         const savedDrill = await newDrill.save();
 
         let video = req.files.video;
-        await video.mv(process.env.VIDEOS_PATH + "/" + savedDrill._id + path.extname(video.name));
+        const videoPath = process.env.VIDEOS_PATH + "/" + savedDrill._id + path.extname(video.name);
+        await video.mv(videoPath);
+
+        ffmpeg(videoPath).screenshots({
+          timestamps: ['50%'],
+          filename: savedDrill._id + '.png',
+          folder: process.env.THUMBNAIL_PATH,
+          size: '320x240'
+        });
 
         res.json(savedDrill);
     }
@@ -49,7 +56,7 @@ router.post("/create", auth, async (req, res) => {
     }
 });
 
-router.get("/:name", async (req, res) => {
+router.get("/:name", auth, async (req, res) => {
     try {
       const drill = await Drill.findOne({ name: req.params.name });
       if (!drill)
@@ -63,7 +70,7 @@ router.get("/:name", async (req, res) => {
     }
 });
 
-router.get("/category/:category", async (req, res) => {
+router.get("/category/:category", auth, async (req, res) => {
   try {
     console.log(req.params.category);
     const drills = await Drill.find({ category: req.params.category });
