@@ -1,70 +1,76 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Link,
+} from 'react-router-dom';
 
 import { Sidenav, Nav, Navbar } from 'rsuite';
 
-import { navdata } from './data/navdata'
-import Login from './components/Login/Login';
+import util from './util/utils';
+
+import { navdata } from './data/navdata';
+import Register from './components/Auth/Register';
+import Login from './components/Auth/Login';
+
 import './App.scss';
 
 const App = () => {
-  const [results, setResults] = useState(null);
-  const [error, setError] = useState(false);
+  const [isLoggedin, setIsLoggedin] = useState(null);
 
-  const fetchTest = () => {
-    const options = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
+  // Login check on mount
+  useEffect(() => {
+    const check = async () => {
+      const isLoggedin = await util.checkLogin();
+      setIsLoggedin(isLoggedin);
     };
-    console.log(options);
-    fetch('/test', options)
-      .then((response) => {
-        if (response.ok) {
-          response
-            .json()
-            .then((jsonObj) => {
-              setResults(jsonObj);
-            })
-            .catch(() => {
-              setError(true);
-            });
-        }
-        setError(true);
-      })
-      .catch(() => {
-        setError(true);
-      });
-  };
+    check();
+  }, []);
 
   const Content = (props) => {
     return (
       <>
-        <div>This is the content component place holder, matching route: {props.match.path}</div>
+        <div>
+          This is the content component place holder, matching route:{' '}
+          {props.match.path}
+        </div>
       </>
     );
   };
 
+  // Logged out prompt
+  const Logout = () => {
+    localStorage.removeItem('token');
+    return <div className='logged-out'>You are now logged out.</div>;
+  };
+
   const mainContent = () => {
-    return (
-      <div className='main-section'>
-        <div className='side-nav'>
-          <Sidenav appearance='su'>
-            {navdata.map((navitem) => {
-              return (
-                <Nav.Item active={true} componentClass={Link} to={navitem.href}>
-                  {navitem.label}
-                </Nav.Item>
-              );
-            })}
-          </Sidenav>
+    if (isLoggedin === true) {
+      return (
+        <div className='main-section'>
+          <div className='side-nav'>
+            <Sidenav appearance='subtle'>
+              {navdata.map((navitem, index) => {
+                return (
+                  <Nav.Item key={index} active={true} componentClass={Link} to={navitem.href}>
+                    {navitem.label}
+                  </Nav.Item>
+                );
+              })}
+            </Sidenav>
+          </div>
+          {navdata.map((navitem, index) => {
+            return <Route  exact path={navitem.href} component={Content} key={index}/>;
+          })}
         </div>
-        {navdata.map((navitem) => {
-          return <Route exact path={navitem.href} component={Content} />;
-        })}
-      </div>
-    );
+      );
+    } else if (isLoggedin === false) {
+      return (<div className='no-login'>Please login or register first.</div>)
+    } else {
+      return null;
+    }
+
   };
 
   return (
@@ -79,19 +85,27 @@ const App = () => {
             </Navbar.Header>
             <Navbar.Body>
               <Nav pullRight>
-                <Nav.Item componentClass={Link} to={'/login'}>
-                  Login
-                </Nav.Item>
+                {isLoggedin === true && (
+                  <Nav.Item href='/Logout'>Logout</Nav.Item>
+                )}
+                {isLoggedin === false && (
+                  <>
+                    <Nav.Item componentClass={Link} to={'/register'}>
+                      Register
+                    </Nav.Item>
+                    <Nav.Item componentClass={Link} to={'/login'}>
+                      Login
+                    </Nav.Item>
+                  </>
+                )}
               </Nav>
             </Navbar.Body>
           </Navbar>
         </div>
         <Switch>
-          <Route
-            exact
-            path='/login'
-            component ={Login}
-          />
+          <Route exact path='/register' component={Register} />
+          <Route exact path='/login' component={Login} />
+          <Route exact path='/logout' component={Logout} />
           <Route component={mainContent} />
         </Switch>
       </Router>
