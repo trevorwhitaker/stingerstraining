@@ -9,7 +9,7 @@ router.post("/create", auth, async (req, res) => {
     try {
         const { label, value, description } = req.body;
         const existingCategory = await Category.findOne({label: label});
-        if (existingDrill) {
+        if (existingCategory) {
             return res.status(400).json({msg: "Category already exists"});
         }
 

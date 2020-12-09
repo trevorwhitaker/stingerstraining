@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(fileUpload());
 app.use("/users", require("./routes/userRouter"));
 app.use("/drills", require("./routes/drillRouter"));
+app.use("/categories", require("./routes/categoryRouter"));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'client-src', 'build', 'index.html'));
