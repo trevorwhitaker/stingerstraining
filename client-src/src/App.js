@@ -1,43 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Link,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
 import { Sidenav, Nav, Navbar } from 'rsuite';
 
 import util from './util/utils';
+import constants from './util/constants';
 
-import { navdata } from './data/navdata';
+// import { navdata } from './data/navdata';
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
+import CardsPage from './components/Pages/CardsPage';
+import DrillPage from './components/Pages/DrillPage';
 
 import './App.scss';
 
 const App = () => {
+  console.log(constants);
   const [isLoggedin, setIsLoggedin] = useState(null);
+  const [navdata, setNavdata] = useState([]);
 
-  // Login check on mount
+  // Login check on mount, fetch data
   useEffect(() => {
     const check = async () => {
       const isLoggedin = await util.checkLogin();
       setIsLoggedin(isLoggedin);
+
+      if (isLoggedin) {
+        const navdata = await util.getCategory(constants.navdataApi);
+        setNavdata(navdata);
+      }
     };
     check();
   }, []);
-
-  const Content = (props) => {
-    return (
-      <>
-        <div>
-          This is the content component place holder, matching route:{' '}
-          {props.match.path}
-        </div>
-      </>
-    );
-  };
 
   // Logged out prompt
   const Logout = () => {
@@ -53,24 +47,45 @@ const App = () => {
             <Sidenav appearance='subtle'>
               {navdata.map((navitem, index) => {
                 return (
-                  <Nav.Item key={index} active={true} componentClass={Link} to={navitem.href}>
+                  <Nav.Item
+                    key={index}
+                    active={true}
+                    componentClass={Link}
+                    to={`/${navitem.value}`}
+                  >
                     {navitem.label}
                   </Nav.Item>
                 );
               })}
             </Sidenav>
           </div>
-          {navdata.map((navitem, index) => {
-            return <Route  exact path={navitem.href} component={Content} key={index}/>;
-          })}
+          <div className='main-content'>
+            {navdata.map((navitem, index) => {
+              return (
+                <>
+                  <Route
+                    exact
+                    path={`/${navitem.value}`}
+                    component={CardsPage}
+                    key={index}
+                  />
+                  <Route
+                    exact
+                    path={`/:category/:drill`}
+                    component={DrillPage}
+                    key={index}
+                  />
+                </>
+              );
+            })}
+          </div>
         </div>
       );
     } else if (isLoggedin === false) {
-      return (<div className='no-login'>Please login or register first.</div>)
+      return <div className='no-login'>Please login or register first.</div>;
     } else {
       return null;
     }
-
   };
 
   return (
@@ -79,9 +94,9 @@ const App = () => {
         <div className='header'>
           <Navbar appearance='inverse'>
             <Navbar.Header>
-              <Link to='/' className='navbar-brand logo'>
+              <a href='/' className='navbar-brand logo'>
                 Stingers Training
-              </Link>
+              </a>
             </Navbar.Header>
             <Navbar.Body>
               <Nav pullRight>

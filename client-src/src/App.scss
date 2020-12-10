@@ -3,6 +3,8 @@
 @import '~carbon-components/scss/components/skeleton/_skeleton-placeholder';
 
 .App {
+  background-color: #f4f4f4;
+
   .logged-out,.no-login {
     text-align: center;
     margin-top: 3rem;
@@ -20,7 +22,11 @@
     display: flex;
     flex-direction: row;
     .side-nav {
-      width: 250px;
+      width: 20%;
+      max-width: 200px;
+    }
+    .main-content {
+      max-width: 60%;
     }
   }
 }

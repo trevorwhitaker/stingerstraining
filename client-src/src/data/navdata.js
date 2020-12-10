@@ -1,18 +1,18 @@
 export const navdata = [
   {
     label: 'Home',
-    href: '/',
+    value: '',
   },
   {
     label: 'Exercise',
-    href: '/exercise',
+    value: 'exercise',
   },
   {
     label: 'Infield',
-    href: '/infield',
+    value: 'infield',
   },
   {
     label: 'Coordination',
-    href: '/coordination',
+    value: 'coordination',
   },
 ];

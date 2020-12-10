@@ -1,0 +1,11 @@
+.card-panel {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .card-panel__card {
+    max-width: 18rem;
+    width: 100%;
+    margin: 1rem;
+  }
+}

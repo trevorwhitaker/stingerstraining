@@ -1,7 +1,7 @@
 node_modules/
 .env
-videos/*
-!videos/.gitkeep 
+public/videos/*
+public/!videos/.gitkeep 
 
-thumbnails/*
-!thumbnails/.gitkeep 
+public/thumbnails/*
+public/!thumbnails/.gitkeep 

@@ -3,6 +3,7 @@ const Drill = require("../models/drillModel");
 const ffmpeg = require('fluent-ffmpeg');
 const auth = require("../middleware/auth");
 const path = require('path');
+const constants = require('../util/constants');
 
 router.post("/create", auth, async (req, res) => {
     try {
@@ -39,13 +40,13 @@ router.post("/create", auth, async (req, res) => {
         const savedDrill = await newDrill.save();
 
         let video = req.files.video;
-        const videoPath = process.env.VIDEOS_PATH + "/" + savedDrill._id + path.extname(video.name);
-        await video.mv(videoPath);
+        const videoApi = constants.videoApi + "/" + savedDrill._id + path.extname(video.name);
+        await video.mv(videoApi);
 
-        ffmpeg(videoPath).screenshots({
+        ffmpeg(videoApi).screenshots({
           timestamps: ['50%'],
           filename: savedDrill._id + '.png',
-          folder: process.env.THUMBNAIL_PATH,
+          folder: constants.thumbnailApi,
           size: '320x240'
         });
 
