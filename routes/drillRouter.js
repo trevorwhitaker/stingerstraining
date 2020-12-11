@@ -40,13 +40,13 @@ router.post("/create", auth, async (req, res) => {
         const savedDrill = await newDrill.save();
 
         let video = req.files.video;
-        const videoApi = constants.videoApi + "/" + savedDrill._id + path.extname(video.name);
-        await video.mv(videoApi);
+        const videoPath = constants.videoDir + "/" + savedDrill._id + path.extname(video.name);
+        await video.mv(videoPath);
 
-        ffmpeg(videoApi).screenshots({
+        ffmpeg(videoPath).screenshots({
           timestamps: ['50%'],
           filename: savedDrill._id + '.png',
-          folder: constants.thumbnailApi,
+          folder: constants.thumbnailDir,
           size: '320x240'
         });
 
