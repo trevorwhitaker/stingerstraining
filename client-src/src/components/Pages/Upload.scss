@@ -1,0 +1,30 @@
+.upload-page {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  min-height: 100vh;
+
+  .create-category, .create-drill {
+    width: 100%;
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    &__label {
+      text-align: center;
+      width: 100%;
+      padding: 1rem;
+    }
+    &__create-section {
+      max-width: 20rem;
+      width: 100%;
+    }
+
+    .loading-skeleton-category, .loading-skeleton-drill {
+      width: 80%;
+    }
+  }
+  .upload-not-loggedin {
+    margin: 5rem;
+  }
+}

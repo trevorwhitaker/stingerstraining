@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Drill = require("../models/drillModel");
+const Category = require("../models/category");
 const ffmpeg = require('fluent-ffmpeg');
 const auth = require("../middleware/auth");
 const path = require('path');
@@ -31,10 +32,14 @@ router.post("/create", auth, async (req, res) => {
             return res.status(400).json({msg: "Drill already exists"});
         }
 
+        const categoriesArray = categories.split(',');
+
+        // TODO: check that each selected category exists in DB first, else res error
+        
         const newDrill = new Drill({
             name,
             description,
-            categories
+            categories: categoriesArray
         });
 
         const savedDrill = await newDrill.save();
@@ -71,6 +76,10 @@ router.get("/:name", auth, async (req, res) => {
     }
 });
 
+router.get("/", async (req, res) => {
+  const drills = await Drill.find();
+  res.json(drills);
+})
 router.get("/category/:category", auth, async (req, res) => {
   try {
     console.log(req.params.category);

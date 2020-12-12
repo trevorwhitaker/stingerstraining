@@ -23,8 +23,8 @@ app.use("/drills", require("./routes/drillRouter"));
 app.use("/categories", require("./routes/categoryRouter"));
 
 // File routes
-app.use(constants.videoApi, auth, express.static(path.join(path.resolve(), constants.videoDir)));
-app.use(constants.thumbnailApi, auth, express.static(path.join(path.resolve(), constants.thumbnailDir)));
+app.use(constants.videoApi, express.static(path.join(path.resolve(), constants.videoDir)));
+app.use(constants.thumbnailApi, express.static(path.join(path.resolve(), constants.thumbnailDir)));
 
 // Front end js file
 app.get('/', (req, res) => {

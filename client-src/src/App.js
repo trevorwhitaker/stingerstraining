@@ -11,6 +11,7 @@ import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import CardsPage from './components/Pages/CardsPage';
 import DrillPage from './components/Pages/DrillPage';
+import Upload from './components/Pages/Upload';
 
 import './App.scss';
 
@@ -39,6 +40,10 @@ const App = () => {
     return <div className='logged-out'>You are now logged out.</div>;
   };
 
+  const HomePage = () => {
+    return navdata.length > 0 && <div>This is a dank homepage</div>;
+  }
+
   const mainContent = () => {
     if (isLoggedin === true) {
       return (
@@ -60,24 +65,24 @@ const App = () => {
             </Sidenav>
           </div>
           <div className='main-content'>
-            {navdata.map((navitem, index) => {
-              return (
-                <>
+            <>
+            <Route
+              exact
+              path={`/`}
+              component={HomePage}
+            />
+              {navdata.map((navitem, index) => {
+                return (
                   <Route
                     exact
                     path={`/${navitem.value}`}
                     component={CardsPage}
                     key={index}
                   />
-                  <Route
-                    exact
-                    path={`/:category/:drill`}
-                    component={DrillPage}
-                    key={index}
-                  />
-                </>
-              );
-            })}
+                );
+              })}
+              <Route exact path={`/:category/:drill/:id`} component={DrillPage} />
+            </>
           </div>
         </div>
       );
@@ -101,14 +106,17 @@ const App = () => {
             <Navbar.Body>
               <Nav pullRight>
                 {isLoggedin === true && (
-                  <Nav.Item href='/Logout'>Logout</Nav.Item>
+                  <>
+                    <Nav.Item componentClass={Link} to='/upload'>Admin upload</Nav.Item>
+                    <Nav.Item href='/logout'>Logout</Nav.Item>
+                  </>
                 )}
                 {isLoggedin === false && (
                   <>
-                    <Nav.Item componentClass={Link} to={'/register'}>
+                    <Nav.Item componentClass={Link} to='/register'>
                       Register
                     </Nav.Item>
-                    <Nav.Item componentClass={Link} to={'/login'}>
+                    <Nav.Item componentClass={Link} to='/login'>
                       Login
                     </Nav.Item>
                   </>
@@ -121,6 +129,7 @@ const App = () => {
           <Route exact path='/register' component={Register} />
           <Route exact path='/login' component={Login} />
           <Route exact path='/logout' component={Logout} />
+          <Route exact path='/upload' component={Upload} />
           <Route component={mainContent} />
         </Switch>
       </Router>

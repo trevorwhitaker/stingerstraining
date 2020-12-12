@@ -1,13 +1,13 @@
 @import '~rsuite/dist/styles/rsuite-default.css';
-@import '~bootstrap/scss/bootstrap';
 @import '~carbon-components/scss/components/skeleton/_skeleton-placeholder';
+@import '~bootstrap/scss/bootstrap';
 
 .App {
   background-color: #f4f4f4;
-
+  min-height: 100vh;
   .logged-out,.no-login {
     text-align: center;
-    margin-top: 3rem;
+    margin: 5rem;
   }
 
   .loading-skeleton-container {
@@ -27,6 +27,7 @@
     }
     .main-content {
       max-width: 60%;
+      margin: 0 2rem;
     }
   }
 }

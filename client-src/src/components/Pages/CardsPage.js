@@ -22,17 +22,16 @@ const CardsPage = ({ match }) => {
 
   return (
     <div className='cards-page'>
-      {data && <div>{category}</div>}
       <div className='card-panel'>
         {data &&
-          data.map((item) => {
+          data.map((item, index) => {
             return (
-              <Card className='card-panel__card'>
+              <Card className='card-panel__card' key={index}>
                 <Card.Body>
-                  <Card.Img variant="top" src={`${constants.thumbnailApi}/${item.name}.png`} />
+                  <Card.Img variant="top" src={`${constants.thumbnailApi}/${item._id}.png`} />
                   <Card.Title>{item.name}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>
-                  <Button as={Link} to={`${category}/${item.name}`} variant='primary'>Go somewhere</Button>
+                  <Button as={Link} to={`${category}/${item.name}/${item._id}`} variant='primary'>Go somewhere</Button>
                 </Card.Body>
               </Card>
             );

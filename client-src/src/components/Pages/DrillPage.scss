@@ -1,0 +1,8 @@
+.drill-page {
+  display: flex;
+  flex-direction: column;
+  video {
+    max-height: 70vh;
+    max-width: 50vw;
+  }
+}

@@ -7,6 +7,15 @@ const path = require('path');
 
 router.post("/create", auth, async (req, res) => {
     try {
+        const user = await User.findById(req.user);
+
+        if (!user || user.role != "admin")
+        {
+            return res
+            .status(401)
+            .json({ msg: "Not authorized." });
+        }
+
         const { label, value, description } = req.body;
         const existingCategory = await Category.findOne({label: label});
         if (existingCategory) {
