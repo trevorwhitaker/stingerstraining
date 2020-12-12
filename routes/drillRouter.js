@@ -16,13 +16,13 @@ router.post("/create", auth, async (req, res) => {
             .json({ msg: "Not authorized." });
         }
 
-        const { name, description, category } = req.body;
+        const { name, description, categories } = req.body;
 
         if (!req.files || Object.keys(req.files).length === 0) {
           return res.status(400).json({msg: 'No files were uploaded.'});
         }
 
-        if (!name || !description || !category) {
+        if (!name || !description || !categories || categories.length == 0) {
             return res.status(400).json({msg: "Missing fields"});
         }
 
@@ -34,7 +34,7 @@ router.post("/create", auth, async (req, res) => {
         const newDrill = new Drill({
             name,
             description,
-            category
+            categories
         });
 
         const savedDrill = await newDrill.save();
@@ -74,8 +74,8 @@ router.get("/:name", auth, async (req, res) => {
 router.get("/category/:category", auth, async (req, res) => {
   try {
     console.log(req.params.category);
-    const drills = await Drill.find({ category: req.params.category });
-
+    const drills = await Drill.find({ categories: req.params.category });
+    console.log(drills);
     res.json(drills);
   } catch (err) {
     res.status(500).json({ error: err.message });
