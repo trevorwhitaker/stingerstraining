@@ -27,7 +27,7 @@ const App = () => {
       setIsLoggedin(isLoggedin);
 
       if (isLoggedin) {
-        const navdata = await util.getCategory(constants.navdataApi);
+        const navdata = await util.getCategories();
         setNavdata(navdata);
       }
     };
@@ -42,9 +42,9 @@ const App = () => {
 
   const HomePage = () => {
     return navdata.length > 0 && <div>This is a dank homepage</div>;
-  }
+  };
 
-  const mainContent = () => {
+  const MainContent = () => {
     if (isLoggedin === true) {
       return (
         <div className='main-section'>
@@ -66,22 +66,31 @@ const App = () => {
           </div>
           <div className='main-content'>
             <>
-            <Route
-              exact
-              path={`/`}
-              component={HomePage}
-            />
+              <Route exact path='/'>
+                <HomePage />
+              </Route>
               {navdata.map((navitem, index) => {
+                const categoryPath = `/${navitem.value}`;
                 return (
                   <Route
                     exact
-                    path={`/${navitem.value}`}
+                    path={categoryPath}
                     component={CardsPage}
                     key={index}
-                  />
+                  >
+                    <CardsPage category={navitem.value} />
+                  </Route>
                 );
               })}
-              <Route exact path={`/:category/:drill/:id`} component={DrillPage} />
+              <Route
+                exact
+                path={`/:category/:drill/`}
+                render={(props) => {
+                  const { category, drill } = props.match.params;
+                  
+                  return <DrillPage category={category} drill={drill} />;
+                }}
+              ></Route>
             </>
           </div>
         </div>
@@ -107,7 +116,9 @@ const App = () => {
               <Nav pullRight>
                 {isLoggedin === true && (
                   <>
-                    <Nav.Item componentClass={Link} to='/upload'>Admin upload</Nav.Item>
+                    <Nav.Item componentClass={Link} to='/upload'>
+                      Admin upload
+                    </Nav.Item>
                     <Nav.Item href='/logout'>Logout</Nav.Item>
                   </>
                 )}
@@ -126,11 +137,21 @@ const App = () => {
           </Navbar>
         </div>
         <Switch>
-          <Route exact path='/register' component={Register} />
-          <Route exact path='/login' component={Login} />
-          <Route exact path='/logout' component={Logout} />
-          <Route exact path='/upload' component={Upload} />
-          <Route component={mainContent} />
+          <Route exact path='/register'>
+            <Register />
+          </Route>
+          <Route exact path='/login'>
+            <Login />
+          </Route>
+          <Route exact path='/logout'>
+            <Logout />
+          </Route>
+          <Route exact path='/upload'>
+            <Upload />
+          </Route>
+          <Route>
+            <MainContent />
+          </Route>
         </Switch>
       </Router>
     </div>

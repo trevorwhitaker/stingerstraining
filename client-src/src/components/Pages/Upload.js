@@ -36,7 +36,7 @@ const Upload = () => {
       setIsLoggedin(isLoggedin);
 
       if (isLoggedin) {
-        const navdata = await util.getCategory(constants.navdataApi);
+        const navdata = await util.getCategories();
         setCategories(
           navdata.map((category) => {
             return { label: category.label, checked: false };
@@ -88,7 +88,7 @@ const Upload = () => {
     };
 
     setTimeout(async () => {
-      const response = await fetch(constants.createCategoryApi, options);
+      const response = await fetch(constants.createCategoryEndpoint, options);
       if (response) {
         const resObj = await response.json();
         if (response.ok) {
@@ -139,7 +139,7 @@ const Upload = () => {
     };
 
     setTimeout(async () => {
-      const response = await fetch(constants.createDrillApi, options);
+      const response = await fetch(constants.createDrillEndpoint, options);
       if (response) {
         const resObj = await response.json();
         if (response.ok) {

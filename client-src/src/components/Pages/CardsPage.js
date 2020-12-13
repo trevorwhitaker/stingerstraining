@@ -9,12 +9,11 @@ import constants from '../../util/constants';
 
 import './CardPage.scss';
 
-const CardsPage = ({ match }) => {
-  const category = match.path;
+const CardsPage = ({ category }) => {
   const [data, setData] = useState(null);
   useEffect(() => {
     const getContent = async () => {
-      const data = await util.getCategory(`${constants.drillsByCategory}${category}`);
+      const data = await util.getDrillByCategory(category);
       setData(data);
     };
     getContent();
@@ -28,10 +27,10 @@ const CardsPage = ({ match }) => {
             return (
               <Card className='card-panel__card' key={index}>
                 <Card.Body>
-                  <Card.Img variant="top" src={`${constants.thumbnailApi}/${item._id}.png`} />
+                  <Card.Img variant="top" src={`${constants.thumbnailEndpoint}/${item._id}.png`} />
                   <Card.Title>{item.name}</Card.Title>
                   <Card.Text>{item.description}</Card.Text>
-                  <Button as={Link} to={`${category}/${item.name}/${item._id}`} variant='primary'>Go somewhere</Button>
+                  <Button as={Link} to={`${category}/${item.name}`} variant='primary'>View drill</Button>
                 </Card.Body>
               </Card>
             );
