@@ -35,6 +35,18 @@ router.post("/create", auth, async (req, res) => {
         const categoriesArray = categories.split(',');
 
         // TODO: check that each selected category exists in DB first, else res error
+        let exists = false;
+        for (category of categoriesArray) {
+          const testCategory = await Category.findOne({value: category});
+          if (testCategory) {
+            exists = true;
+            break;
+          }
+        }
+
+        if (!exists) {
+          return res.status(400).json({msg: "Category doesn't exist"});
+        }
         
         const newDrill = new Drill({
             name,
