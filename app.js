@@ -27,7 +27,7 @@ app.use(constants.videoApi, express.static(path.join(path.resolve(), constants.v
 app.use(constants.thumbnailApi, express.static(path.join(path.resolve(), constants.thumbnailDir)));
 
 // Front end js file
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client-src', 'build', 'index.html'));
 })
 
