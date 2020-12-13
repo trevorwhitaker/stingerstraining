@@ -29,8 +29,7 @@ const CardsPage = ({ category }) => {
                 <Card.Body>
                   <Card.Img variant="top" src={`${constants.thumbnailEndpoint}/${item._id}.png`} />
                   <Card.Title>{item.name}</Card.Title>
-                  <Card.Text>{item.description}</Card.Text>
-                  <Button as={Link} to={`${category}/${item.name}`} variant='primary'>View drill</Button>
+                  <Button as={Link} to={`${category}/${item.name}`} variant='primary'>View</Button>
                 </Card.Body>
               </Card>
             );
