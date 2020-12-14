@@ -109,6 +109,7 @@ const App = () => {
           <Navbar appearance='inverse'>
             <Navbar.Header>
               <a href='/' className='navbar-brand logo'>
+                <img src="https://cdn3.sportngin.com/attachments/contact/f7f0-140393562/Scarborough_Stingers_Full_Logo.png" />
                 Stingers Training
               </a>
             </Navbar.Header>

@@ -1,6 +1,22 @@
 @import '~rsuite/dist/styles/rsuite-default.css';
 @import '~carbon-components/scss/components/skeleton/_skeleton-placeholder';
 @import '~bootstrap/scss/bootstrap';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+$background-color: #000000;
+$primary-color: #fbb324;
+$font-color: #333333;
+
+* {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.btn {
+  background-color: $primary-color !important;
+  border-color: $primary-color !important;
+  color: $font-color !important;
+  font-weight: bold !important;
+}
 
 .App {
   background-color: #f4f4f4;
@@ -15,6 +31,20 @@
     justify-content: center;
     .loading-skeleton-1 {
       width: 50vw;
+    }
+  }
+
+  .rs-navbar {
+    background-color: $background-color;
+
+    .rs-navbar-header {
+      display: flex;
+      align-items: center;
+    }
+
+    img {
+      height: 40px;
+      margin: 0 20px;
     }
   }
 
