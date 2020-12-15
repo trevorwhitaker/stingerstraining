@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
-import { Sidenav, Nav, Navbar } from 'rsuite';
+import { Nav, Navbar, Icon } from 'rsuite';
 
 import util from './util/utils';
 import constants from './util/constants';
+import MobileNav from './components/Header/MobileNav';
+import SideBar from './components/Header/SideBar';
 
 // import { navdata } from './data/navdata';
 import Register from './components/Auth/Register';
@@ -18,6 +20,7 @@ import './App.scss';
 const App = () => {
   console.log(constants);
   const [isLoggedin, setIsLoggedin] = useState(null);
+  const [showMobileNav, toggleMobileNav] = useState(false);
   const [navdata, setNavdata] = useState([]);
 
   // Login check on mount, fetch data
@@ -49,20 +52,7 @@ const App = () => {
       return (
         <div className='main-section'>
           <div className='side-nav'>
-            <Sidenav appearance='subtle'>
-              {navdata.map((navitem, index) => {
-                return (
-                  <Nav.Item
-                    key={index}
-                    active={true}
-                    componentClass={Link}
-                    to={`/${navitem.value}`}
-                  >
-                    {navitem.label}
-                  </Nav.Item>
-                );
-              })}
-            </Sidenav>
+          <SideBar navData={navdata} />
           </div>
           <div className='main-content'>
             <>
@@ -102,36 +92,45 @@ const App = () => {
     }
   };
 
+  const renderAuthNav = (
+    <div className="desktopAuth">
+    {isLoggedin === true && (
+      <>
+        <Nav.Item componentClass={Link} to='/upload'>
+          Admin upload
+        </Nav.Item>
+        <Nav.Item href='/logout'>Logout</Nav.Item>
+      </>
+    )}
+    {isLoggedin === false && (
+      <>
+        <Nav.Item componentClass={Link} to='/register'>
+          Register
+        </Nav.Item>
+        <Nav.Item componentClass={Link} to='/login'>
+          Login
+        </Nav.Item>
+      </>
+    )}
+    </div>
+  );
+
   return (
     <div className='App'>
       <Router>
         <div className='header'>
+          <MobileNav navData={navdata} showMobileNav={showMobileNav} toggleMobileNav={toggleMobileNav}/>
           <Navbar appearance='inverse'>
             <Navbar.Header>
               <a href='/' className='navbar-brand logo'>
+                <img src="https://cdn3.sportngin.com/attachments/contact/f7f0-140393562/Scarborough_Stingers_Full_Logo.png" />
                 Stingers Training
               </a>
             </Navbar.Header>
             <Navbar.Body>
               <Nav pullRight>
-                {isLoggedin === true && (
-                  <>
-                    <Nav.Item componentClass={Link} to='/upload'>
-                      Admin upload
-                    </Nav.Item>
-                    <Nav.Item href='/logout'>Logout</Nav.Item>
-                  </>
-                )}
-                {isLoggedin === false && (
-                  <>
-                    <Nav.Item componentClass={Link} to='/register'>
-                      Register
-                    </Nav.Item>
-                    <Nav.Item componentClass={Link} to='/login'>
-                      Login
-                    </Nav.Item>
-                  </>
-                )}
+                {renderAuthNav}
+                <Icon icon="bars" onClick={() => toggleMobileNav(true)} className="navIcon"/>
               </Nav>
             </Navbar.Body>
           </Navbar>

@@ -2,15 +2,24 @@
 
 ## To run locally:
 
-Open a terminal on the root folder:
+1) Make sure to have needed `.env` variables set (See `.env.example`):
+``` bash
+MONGODB_CONN_STRING=
+JWT_SECRET=
+```
 
+2) Install dependancies
 ``` bash
 npm install
 npm run client:install
+```
+
+3) Run the server in terminal window
+``` bash
 npm run start:dev
 ```
 
-In a new terminal:
+4) Run the client in another terminal window
 ``` bash
 npm run client:start
 ```

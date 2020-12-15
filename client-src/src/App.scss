@@ -1,6 +1,37 @@
 @import '~rsuite/dist/styles/rsuite-default.css';
 @import '~carbon-components/scss/components/skeleton/_skeleton-placeholder';
 @import '~bootstrap/scss/bootstrap';
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+$background-color: #000000;
+$primary-color: #fbb324;
+$font-color: #333333;
+$light-color: #f4f4f4;
+
+$nav-height: 50px;
+$box-shadow: 15px 10px 79px -87px rgba(0,0,0,0.75);
+
+* {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.btn {
+  background-color: $primary-color !important;
+  border-color: $primary-color !important;
+  color: $font-color !important;
+  font-weight: bold !important;
+}
+
+.card {
+  box-shadow: $box-shadow;
+  border-color: $light-color;
+  border-radius: 5px;
+
+  @media (max-width: 400px) {
+    max-width: none !important;
+  }
+}
+
 
 .App {
   background-color: #f4f4f4;
@@ -18,25 +49,128 @@
     }
   }
 
+  .rs-navbar {
+    background-color: $background-color;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+
+    .rs-navbar-header {
+      display: flex;
+      align-items: center;
+    }
+
+    img {
+      height: 40px;
+      margin: 0 20px;
+    }
+
+    .rs-nav-item:hover a {
+      background-color: $primary-color !important;
+      color: $font-color !important;
+      font-weight: bold;
+    } 
+  }
+
   .main-section {
+    padding-top: $nav-height;
     display: flex;
     flex-direction: row;
     min-height: 100vh;
 
     .side-nav {
-      width: 20%;
-      max-width: 200px;
+      min-width: 200px;
+      background-color: #fff;
+      box-shadow: $box-shadow;
+      display: none;
 
       .rs-sidenav {
         height: 100%;
+        margin-top: 50px;
+        border-top: 2px solid $light-color;
+
+
+        .rs-nav-item {
+          list-style: none;
+          transition: all 0.3s ease-in-out;
+
+          &:hover, &.rs-nav-item-active {
+            background-color: $light-color;
+            font-weight: bold;
+            
+          }
+
+          a {
+            padding: 20px;
+            color: $font-color;
+            border-bottom: 2px solid $light-color;
+          }
+        }
+      }
+
+      @media (min-width: 400px) {
+        display: block;
       }
     }
     .main-content {
       width: 100%;
-      margin: 0 2rem;
-      @media (min-width: 1000px) {
-        max-width: 70vw;
+      margin: 2rem;
+
+      @media (max-width: 400px) {
+        display: block;
+        margin: 2em 1rem 1em 1em;
       }
     }
   }
 }
+
+.rs-drawer {
+  .rs-drawer-body {
+    margin-bottom: 0;
+
+  }
+  .rs-nav-item {
+    list-style: none;
+    transition: all 0.3s ease-in-out;
+    text-align: left;
+
+    a {
+      padding: 20px 30px !important;
+    }
+
+    &.rs-nav-item-active {
+      background-color: $light-color;
+      font-weight: bold;
+    }
+
+    a {
+      padding: 20px;
+      color: $font-color;
+      border-bottom: 2px solid $light-color;
+    }
+  }
+}
+
+.rs-drawer-wrapper {
+  display: none;
+  @media (max-width: 400px) {
+    display: block;
+  }
+}
+
+.navIcon {
+  display: none;
+  font-size: 30px;
+  margin: 10px 15px;
+  @media (max-width: 400px) {
+    display: block;
+  }
+}
+
+.desktopAuth {
+  display: block;
+  @media (max-width: 400px) {
+    display: none;
+  }
+}
+
