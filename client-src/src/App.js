@@ -35,7 +35,7 @@ const App = () => {
       }
     };
     check();
-  }, [window.location.pathname]);
+  }, []);
 
   // Logged out prompt
   const Logout = () => {
