@@ -44,7 +44,7 @@ const App = () => {
   };
 
   const HomePage = () => {
-    return navdata.length > 0 && <div>This is a dank homepage</div>;
+    return navdata.length > 0 && <div>Scarborough Stingers Workouts and Drills</div>;
   };
 
   const MainContent = () => {
