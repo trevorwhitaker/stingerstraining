@@ -20,7 +20,7 @@ import './App.scss';
 const App = () => {
   console.log(constants);
   const [isLoggedin, setIsLoggedin] = useState(null);
-  const [showMobileNav, toggleMobileNav] = useState(true);
+  const [showMobileNav, toggleMobileNav] = useState(false);
   const [navdata, setNavdata] = useState([]);
 
   // Login check on mount, fetch data
