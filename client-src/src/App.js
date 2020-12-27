@@ -20,6 +20,7 @@ import './App.scss';
 const App = () => {
   console.log(constants);
   const [isLoggedin, setIsLoggedin] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [showMobileNav, toggleMobileNav] = useState(false);
   const [navdata, setNavdata] = useState([]);
 
@@ -33,18 +34,36 @@ const App = () => {
         const navdata = await util.getCategories();
         setNavdata(navdata);
       }
+      const isAdmin = await util.checkAdmin();
+      setIsAdmin(isAdmin);
     };
     check();
   }, []);
 
   // Logged out prompt
   const Logout = () => {
-    localStorage.removeItem('token');
     return <div className='logged-out'>You are now logged out.</div>;
   };
 
   const HomePage = () => {
     return navdata.length > 0 && <div>Scarborough Stingers Workouts and Drills</div>;
+  };
+
+  async function logout() {
+    const options = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    const response = await fetch(constants.logoutEndpoint, options);
+      if (response.ok) {
+        localStorage.removeItem('loggedIn');
+        setIsLoggedin(false);
+      } else {
+        console.log(response.msg);
+      }
   };
 
   const MainContent = () => {
@@ -96,10 +115,11 @@ const App = () => {
     <div className="desktopAuth">
     {isLoggedin === true && (
       <>
-        <Nav.Item componentClass={Link} to='/upload'>
+        {isAdmin === true && (<Nav.Item componentClass={Link} to='/upload'>
           Admin upload
-        </Nav.Item>
-        <Nav.Item href='/logout'>Logout</Nav.Item>
+        </Nav.Item>)
+        }
+        <Nav.Item onClick={() => logout()}>Logout</Nav.Item>
       </>
     )}
     {isLoggedin === false && (

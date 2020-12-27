@@ -72,13 +72,11 @@ const Upload = () => {
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
     setCategoryUploadWait(true);
-    const token = localStorage.getItem('token');
 
     const options = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'x-auth-token': token,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         label: categoryLabel,
@@ -112,7 +110,6 @@ const Upload = () => {
   const handleDrillSubmit = async (e) => {
     e.preventDefault();
     setDrillUploadWait(true);
-    const token = localStorage.getItem('token');
 
     const formData = new FormData();
 
@@ -133,7 +130,6 @@ const Upload = () => {
     const options = {
       method: 'POST',
       headers: {
-        'x-auth-token': token,
       },
       body: formData,
     };

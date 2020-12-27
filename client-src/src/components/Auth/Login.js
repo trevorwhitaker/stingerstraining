@@ -46,21 +46,12 @@ export default function Login() {
     };
 
     const response = await fetch('/users/login', options);
-    let token;
     if (response) {
       const resObj = await response.json();
       if (response.ok) {
-        token = resObj?.token;
-        if (token) {
-          localStorage.setItem('token', token);
+        util.setWithExpiry('loggedIn', true, 1000 * 60 * 60 * 24);
           setSuccess(true);
-          setTimeout(() => {
-            window.location = '/'
-          }, 5000);
-        } else {
-          setError('no token')
-          setSuccess(false);
-        }
+          window.location = '/';
       } else {
         setError(resObj?.msg);
         setSuccess(false);

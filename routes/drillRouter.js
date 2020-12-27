@@ -9,7 +9,6 @@ const constants = require('../util/constants');
 router.post("/create", auth, async (req, res) => {
     try {
         const user = await User.findById(req.user);
-
         if (!user || user.role != "admin")
         {
             return res
@@ -94,9 +93,7 @@ router.get("/", async (req, res) => {
 })
 router.get("/category/:category", auth, async (req, res) => {
   try {
-    console.log(req.params.category);
     const drills = await Drill.find({ categories: req.params.category });
-    console.log(drills);
     res.json(drills);
   } catch (err) {
     res.status(500).json({ error: err.message });
