@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
 
-import { Nav, Navbar, Icon, SelectPicker } from 'rsuite';
+import { Nav, Navbar, Icon } from 'rsuite';
 
 import util from './util/utils';
 import constants from './util/constants';
@@ -32,7 +32,6 @@ const App = () => {
 
       if (isLoggedin) {
         const navdata = await util.getCategories();
-        console.log(navdata);
         setNavdata(navdata);
       }
       const isAdmin = await util.checkAdmin();
