@@ -27,23 +27,19 @@ router.post("/register", async (req, res) => {
 
         const salt = await bcrypt.genSalt();
         const passwordHash = await(bcrypt.hash(password, salt));
-
+        const d = new Date();
         const newUser = new User({
             username,
             password: passwordHash,
-            role: "User"
+            role: "User",
+            loginDates: [d.toDateString()]
         });
 
         const savedUser = await newUser.save();
-        const token = jwt.sign({ id: savedUser._id }, process.env.JWT_SECRET);
+        req.session.userId = savedUser._id;
         res.json({
-          token,
-          user: {
-            id: savedUser._id,
-            username: savedUser.username,
-          },
+          userId: savedUser._id
         });
-        res.json(savedUser);
     }
     catch (error) {
         res.status(500).json({err: error.message});
@@ -66,14 +62,12 @@ router.post("/login", async (req, res) => {
   
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) return res.status(400).json({ msg: "Invalid credentials." });
-  
-      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+      const d = new Date();
+      user.loginDates.push(d.toDateString());
+      await user.save();
+      req.session.userId = user._id;
       res.json({
-        token,
-        user: {
-          id: user._id,
-          username: user.username,
-        },
+        userId: user._id
       });
     } catch (err) {
       res.status(500).json({ error: err.message });
@@ -89,21 +83,27 @@ router.delete("/delete", auth, async (req, res) => {
     }
 });
 
-router.post("/isTokenValid", async (req, res) => {
+router.post("/isLoggedIn", async (req, res) => {
     try {
-      const token = req.header("x-auth-token");
-      if (!token) return res.json(false);
+      if (!req.session.userId) {
+        return res.json(false);
+      }
   
-      const verified = jwt.verify(token, process.env.JWT_SECRET);
-      if (!verified) return res.json(false);
-  
-      const user = await User.findById(verified.id);
-      if (!user) return res.json(false);
-  
-      return res.json(true);
+      res.json(true);
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
+});
+
+router.post("/logout", async (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({msg: "Error deleting session"});
+    }
+  });
+
+  res.clearCookie('connect.sid');
+  res.json({success: true});
 });
 
 router.get("/", auth, async (req, res) => {
@@ -117,5 +117,22 @@ router.get("/", auth, async (req, res) => {
       id: user._id,
     });
 });
+
+router.get("/isAdmin", auth, async (req, res) => {
+  try {
+      const user = await User.findById(req.user);
+
+      if (!user || user.role != "admin")
+      {
+          res.json(false)
+      }
+      else {
+        res.json(true)
+      }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 module.exports = router;

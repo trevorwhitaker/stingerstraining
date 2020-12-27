@@ -53,6 +53,8 @@ export default function Register() {
     if (response) {
       if (response.ok) {
         setSuccess(true);
+        util.setWithExpiry('loggedIn', true, 1000 * 60 * 60 * 24);
+        window.location = "/";
       } else {
         const jsonObj = await response.json();
         setError(jsonObj?.msg);

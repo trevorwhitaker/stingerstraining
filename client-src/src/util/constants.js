@@ -6,6 +6,8 @@ const constants = {
   drillByNameEndpoint: '/drills',
   createCategoryEndpoint: '/categories/create',
   createDrillEndpoint: '/drills/create',
+  logoutEndpoint: '/users/logout',
+  isAdminEndpoint: '/users/isAdmin'
 }
 
 export default constants;
