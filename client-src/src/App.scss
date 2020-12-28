@@ -32,6 +32,11 @@ $box-shadow: 15px 10px 79px -87px rgba(0,0,0,0.75);
   }
 }
 
+h3 {
+  margin: 40px 0 20px 0;
+  font-weight: bold;
+}
+
 
 .App {
   background-color: #f4f4f4;
@@ -65,7 +70,7 @@ $box-shadow: 15px 10px 79px -87px rgba(0,0,0,0.75);
       margin: 0 20px;
     }
 
-    .rs-nav-item:hover a {
+    .rs-nav-item:hover a, .rs-nav-item a:active, .rs-nav-item a:focus {
       background-color: $primary-color !important;
       color: $font-color !important;
       font-weight: bold;

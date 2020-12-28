@@ -2,11 +2,9 @@
   display: flex;
   justify-content: center;
   flex-direction: row;
-  min-height: 100vh;
 
   .create-category, .create-drill {
     width: 100%;
-    margin: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,8 +14,12 @@
       padding: 1rem;
     }
     &__create-section {
-      max-width: 20rem;
-      width: 100%;
+      width: 80%;
+
+      button {
+        width: 70%;
+        margin: 20px auto;
+      }
     }
 
     .loading-skeleton-category, .loading-skeleton-drill {
@@ -26,5 +28,9 @@
   }
   .upload-not-loggedin {
     margin: 5rem;
+  }
+
+  @media (max-width: 400px) {
+    flex-direction: column;
   }
 }

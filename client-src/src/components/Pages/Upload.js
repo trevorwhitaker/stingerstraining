@@ -219,9 +219,9 @@ const Upload = () => {
             )}
             {!categoryUploadSuccess && !categoryUploadError && !categoryUploadWait && (
               <>
-                <label className='create-category__label'>
+                <h3>
                   Create a category
-                </label>
+                </h3>
                 <div className='create-category__create-section'>
                   <Form onSubmit={(e) => handleCategorySubmit(e)}>
                     <Form.Group controlId='createCategory.categoryName'>
@@ -293,9 +293,9 @@ const Upload = () => {
             )}
             {!drillUploadSuccess && !drillUploadError && !drillUploadWait && (
               <>
-                <label className='create-category__label'>
+                <h3>
                   Create a new drill
-                </label>
+                </h3>
                 <div className='create-category__create-section'>
                   <Form onSubmit={(e) => handleDrillSubmit(e)}>
                     <Form.Group controlId='createDrill.drillName'>

@@ -26,12 +26,10 @@ const App = () => {
       const isLoggedin = await util.checkLogin();
       setIsLoggedin(isLoggedin);
 
-      if (isLoggedin) {
-        navData = await util.getCategories();
-        console.log('navData', navData)
-      }
-      setNavData(navData);
+      if (isLoggedin) navData = await util.getCategories();
+
       const isAdmin = await util.checkAdmin();
+      setNavData(navData);
       setIsAdmin(isAdmin);
     };
     check();
