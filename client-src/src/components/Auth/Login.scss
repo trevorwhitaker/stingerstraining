@@ -1,14 +1,16 @@
-@media all and (min-width: 480px) {
-  .Login {
-    padding: 60px 0;
-  }
+.Login {
+  padding: 60px 0;
+}
 
-  .login-success, .login-error, .logged-in {
-    text-align: center;
-  }
+.login-success, .login-error, .logged-in {
+  text-align: center;
+}
 
-  .Login form {
-    margin: 0 auto;
-    max-width: 320px;
-  }
+.Login form {
+  margin: 0 auto;
+  max-width: 320px;
+}
+
+.Login button {
+  margin-top: 40px;
 }

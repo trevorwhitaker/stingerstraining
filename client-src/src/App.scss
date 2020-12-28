@@ -72,8 +72,11 @@ $box-shadow: 15px 10px 79px -87px rgba(0,0,0,0.75);
     } 
   }
 
-  .main-section {
+  .main {
     padding-top: $nav-height;
+  }
+
+  .main-section {
     display: flex;
     flex-direction: row;
     min-height: 100vh;

@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-
-import { Nav, Navbar, Icon } from 'rsuite';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import util from './util/utils';
-import constants from './util/constants';
-import MobileNav from './components/Header/MobileNav';
+import Header from './components/Header';
 import SideBar from './components/Header/SideBar';
 
 // import { navdata } from './data/navdata';
@@ -18,27 +15,27 @@ import Upload from './components/Pages/Upload';
 import './App.scss';
 
 const App = () => {
-  console.log(constants);
   const [isLoggedin, setIsLoggedin] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [showMobileNav, toggleMobileNav] = useState(false);
-  const [navdata, setNavdata] = useState([]);
+  const [navdata, setNavData] = useState([]);
 
   // Login check on mount, fetch data
   useEffect(() => {
     const check = async () => {
+      let navData = [];
       const isLoggedin = await util.checkLogin();
       setIsLoggedin(isLoggedin);
 
       if (isLoggedin) {
-        const navdata = await util.getCategories();
-        setNavdata(navdata);
+        navData = await util.getCategories();
+        console.log('navData', navData)
       }
+      setNavData(navData);
       const isAdmin = await util.checkAdmin();
       setIsAdmin(isAdmin);
     };
     check();
-  }, []);
+  }, [isLoggedin]);
 
   // Logged out prompt
   const Logout = () => {
@@ -49,33 +46,20 @@ const App = () => {
     return navdata.length > 0 && <div>Scarborough Stingers Workouts and Drills</div>;
   };
 
-  async function logout() {
-    const options = {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    };
-    const response = await fetch(constants.logoutEndpoint, options);
-      if (response.ok) {
-        localStorage.removeItem('loggedIn');
-        setIsLoggedin(false);
-      } else {
-        console.log(response.msg);
-      }
-  };
-
   const MainContent = () => {
     if (isLoggedin === true) {
       return (
         <div className='main-section'>
           <div className='side-nav'>
-          <SideBar navData={navdata} />
+          <SideBar
+            isAdmin={isAdmin}
+            isLoggedin={isLoggedin}
+            setIsLoggedin={setIsLoggedin}
+            navData={navdata}
+          />
           </div>
           <div className='main-content'>
-            <>
-              <Route exact path='/'>
+          <Route exact path='/'>
                 <HomePage />
               </Route>
               {navdata.map((navitem, index) => {
@@ -100,7 +84,6 @@ const App = () => {
                   return <DrillPage category={category} drill={drill} />;
                 }}
               ></Route>
-            </>
           </div>
         </div>
       );
@@ -111,67 +94,34 @@ const App = () => {
     }
   };
 
-  const renderAuthNav = (
-    <div className="desktopAuth">
-    {isLoggedin === true && (
-      <>
-        {isAdmin === true && (<Nav.Item componentClass={Link} to='/upload'>
-          Admin upload
-        </Nav.Item>)
-        }
-        <Nav.Item onClick={() => logout()}>Logout</Nav.Item>
-      </>
-    )}
-    {isLoggedin === false && (
-      <>
-        <Nav.Item componentClass={Link} to='/register'>
-          Register
-        </Nav.Item>
-        <Nav.Item componentClass={Link} to='/login'>
-          Login
-        </Nav.Item>
-      </>
-    )}
-    </div>
-  );
-
   return (
     <div className='App'>
       <Router>
-        <div className='header'>
-          <MobileNav navData={navdata} showMobileNav={showMobileNav} toggleMobileNav={toggleMobileNav}/>
-          <Navbar appearance='inverse'>
-            <Navbar.Header>
-              <a href='/' className='navbar-brand logo'>
-                <img src="https://cdn3.sportngin.com/attachments/contact/f7f0-140393562/Scarborough_Stingers_Full_Logo.png" />
-                Stingers Training
-              </a>
-            </Navbar.Header>
-            <Navbar.Body>
-              <Nav pullRight>
-                {renderAuthNav}
-                <Icon icon="bars" onClick={() => toggleMobileNav(true)} className="navIcon"/>
-              </Nav>
-            </Navbar.Body>
-          </Navbar>
+        <Header
+         isAdmin={isAdmin}
+         isLoggedin={isLoggedin}
+         setIsLoggedin={setIsLoggedin}
+         navData={navdata}
+        />
+        <div className="main">
+          <Switch>
+            <Route exact path='/register'>
+              <Register />
+            </Route>
+            <Route exact path='/login'>
+              <Login />
+            </Route>
+            <Route exact path='/logout'>
+              <Logout />
+            </Route>
+            <Route exact path='/upload'>
+              <Upload />
+            </Route>
+            <Route>
+              <MainContent />
+            </Route>
+          </Switch>
         </div>
-        <Switch>
-          <Route exact path='/register'>
-            <Register />
-          </Route>
-          <Route exact path='/login'>
-            <Login />
-          </Route>
-          <Route exact path='/logout'>
-            <Logout />
-          </Route>
-          <Route exact path='/upload'>
-            <Upload />
-          </Route>
-          <Route>
-            <MainContent />
-          </Route>
-        </Switch>
       </Router>
     </div>
   );
