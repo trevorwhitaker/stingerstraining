@@ -1,0 +1,53 @@
+#timeline{
+  width: 400px;
+  height: 20px;
+  border-radius: 15px;
+  background: black;
+  margin: auto;
+}
+
+#handle{
+width: 18px;
+height: 18px;
+border-radius: 50%;
+margin-top: 10px;
+background: rgba($color: #f5d700, $alpha: 1.0);
+}
+
+.active {
+  color: #f5d700;
+}
+
+.not-active {
+  color: black;
+}
+
+.name-enter {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.thunder-header {
+  margin-top: 10px;
+}
+
+.thunder-main {
+  text-align: center
+}
+
+.reset-button {
+  margin-top: 10px;
+}
+
+.shuffle-button {
+  margin-top: 10px;
+}
+.name-header {
+  display: inline-block;
+}
+
+.name-button {
+  display: inline-block;
+  color: red;
+  margin-left: 20px;
+}
