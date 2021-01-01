@@ -10,6 +10,7 @@ import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import CardsPage from './components/Pages/CardsPage';
 import DrillPage from './components/Pages/DrillPage';
+import ThunderPage from './components/Pages/ThunderPage';
 import Upload from './components/Pages/Upload';
 
 import './App.scss';
@@ -114,6 +115,9 @@ const App = () => {
             </Route>
             <Route exact path='/upload'>
               <Upload />
+            </Route>
+            <Route exact path='/thunderstruck'>
+              <ThunderPage />
             </Route>
             <Route>
               <MainContent />
