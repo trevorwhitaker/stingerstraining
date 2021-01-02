@@ -54,13 +54,13 @@ export default class ThunderPage extends React.Component {
           "279.00"
         ];
 
-        if (thunderTimes.includes(second) && this.state.lastSwitchTime != second) {
+        if (thunderTimes.includes(second) && this.state.lastSwitchTime !== second) {
           if (this.state.currentActive >= 0) {
             document.getElementById(this.state.players[this.state.currentActive]).className = 'not-active';
           }
           
-          this.state.currentActive = (this.state.currentActive + 1) % this.state.players.length;
-          this.state.lastSwitchTime = second;
+          this.setState({ currentActive: (this.state.currentActive + 1) % this.state.players.length});
+          this.setState({lastSwitchTime: second});
           document.getElementById(this.state.players[this.state.currentActive]).className = 'active';
         }
       }
@@ -191,7 +191,7 @@ export default class ThunderPage extends React.Component {
 
     let indexMeat = newArray.indexOf("Meat");
 
-    if (indexMeat != -1) {
+    if (indexMeat !== -1) {
       let targetIndex = 15 % newArray.length;
       temporaryValue = newArray[indexMeat];
       newArray[indexMeat] = newArray[targetIndex];

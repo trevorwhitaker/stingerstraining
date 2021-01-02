@@ -140,6 +140,17 @@ const Upload = () => {
         const resObj = await response.json();
         if (response.ok) {
           setDrillUploadSuccess(true);
+          setDrillName('');
+          setDrillDesc('');
+          setDrillVideoFile(null);
+          setCategories(
+            categories.map((category) => {
+              return {
+                label: category.label,
+                checked: false
+              };
+            })
+          );
         } else {
           setDrillUploadSuccess(false);
           setDrillUploadError(resObj?.msg);
