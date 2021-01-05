@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 
 import constants from '../../util/constants';
 import util from '../../util/utils';
@@ -8,14 +11,38 @@ import './DrillPage.scss';
 const DrillPage = ({ drill }) => {
 
   const [data, setData] = useState(null);
+  const [count, setCount] = useState(0);
+  const [type, setType] = useState('Reps');
 
   useEffect(() => {
+    let mounted = true;
     const getContent = async () => {
       const data = await util.getDrillByName(drill);
-      setData(data);
+      if (mounted) {
+        setData(data);
+      }
     };
     getContent();
-  }, [drill])
+    return () => mounted = false;
+  }, [drill]);
+
+    // Validate category data before enabling submit button
+    const validateCategoryForm = () => {
+      return (
+        count.length > 0
+      );
+    };
+
+    // submit data to create a new category
+  const handleCategorySubmit = async (e) => {
+    e.preventDefault();
+    const record = await util.createNewRecord(data.drill._id, count, type);
+    setCount(0);
+    setType('Reps');
+    let tempData = data;
+    tempData.records = record.records;
+    setData(tempData);
+  };
 
   return (
     data && <div className='drill-page'>
@@ -23,9 +50,57 @@ const DrillPage = ({ drill }) => {
         {drill}
       </div>
       <video className='drill-page__video' controls>
-        <source src={`${constants.videoEndpoint}/${data._id}.mp4`} type="video/mp4"/>
+        <source src={`${constants.videoEndpoint}/${data.drill._id}.mp4`} type="video/mp4"/>
       </video>
-      <div className='drill-page__description'>{data.description}</div>
+      <div className='drill-page__description'>{data.drill.description}</div>
+      <hr></hr>
+      <Form onSubmit={(e) => handleCategorySubmit(e)}>
+                    <Form.Group controlId='addReps.count'>
+                      <Form.Label>Count</Form.Label>
+                      <Form.Control
+                        as='input'
+                        value={count}
+                        onChange={(e) => setCount(e.target.value)}
+                      />
+                    </Form.Group>
+                    <Form.Group controlId='addReps.type'>
+                      <Form.Label>Type</Form.Label>
+                      <Form.Control as="select"
+                        value={type}
+                        onChange={(e) => setType(e.target.value)} >
+                        <option>Reps</option>
+                        <option>Minutes</option>
+                      </Form.Control>
+                    </Form.Group>
+                    <Button
+                      block
+                      size='lg'
+                      type='submit'
+                      disabled={!validateCategoryForm()}
+                      className="add-rep-button"
+                    >
+                      Add Reps
+                    </Button>
+                  </Form>
+       <Table striped bordered hover className="rep-table">
+       <thead>
+         <tr>
+           <th width='40%'>Date</th>
+           <th width='30%'>Count</th>
+           <th width='30%'>Type</th>
+         </tr>
+       </thead>
+       <tbody>
+         {data.records && data.records.records.map(record => (
+            <tr key={record.date}>
+              <td>{new Date(record.date).toLocaleString()}</td>
+              <td>{record.count}</td>
+              <td>{record.description}</td>
+            </tr>
+          ))}
+       </tbody>
+     </Table>
+
     </div>
   );
 };

@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Drill = require("../models/drillModel");
 const Category = require("../models/category");
+const Record = require("../models/recordModel");
 const ffmpeg = require('fluent-ffmpeg');
 const auth = require("../middleware/auth");
 const path = require('path');
@@ -80,9 +81,10 @@ router.get("/:name", auth, async (req, res) => {
         return res
           .status(400)
           .json({ msg: "No drill with that name." });
-
-      res.json(drill);
+          const records = await Record.findOne({user: req.user, drill: drill._id});
+      res.json({drill: drill, records: records});
     } catch (err) {
+      console.log(err.message);
       res.status(500).json({ error: err.message });
     }
 });
@@ -91,6 +93,7 @@ router.get("/", async (req, res) => {
   const drills = await Drill.find();
   res.json(drills);
 })
+
 router.get("/category/:category", auth, async (req, res) => {
   try {
     const drills = await Drill.find({ categories: req.params.category });
@@ -115,6 +118,42 @@ router.delete("/delete", auth, async (req, res) => {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
+});
+
+router.post("/createRecord", auth, async (req, res) => {
+  try {
+    const { drillId, count, type } = req.body;
+    const user = await User.findById(req.user);
+    if (!user)
+    {
+        return res
+        .status(401)
+        .json({ msg: "Not authorized." });
+    }
+    const userId = user._id;
+    const existingRecord = await Record.findOne({user: userId, drill: drillId});
+
+    let savedRecord = null;
+    if (existingRecord) {
+
+      existingRecord.records.push({
+        date: new Date(),
+        count: count,
+        description: type
+      });
+      savedRecord = await existingRecord.save();
+    }
+    else {
+      const newRecord = new Record({user: userId, drill: drillId, records: [{date: new Date(), count: count, description: type}]});
+      savedRecord = await newRecord.save();
+    }
+
+    return res.json(savedRecord);
+
+  } catch (err) {
+    console.log(err.message);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
