@@ -135,6 +135,36 @@ const util = {
     }
   },
 
+  async createNewRecord(drillId, count, type) {
+    const loggedIn = this.getWithExpiry('loggedIn');
+
+    if (!loggedIn) {
+      return false;
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        drillId: drillId,
+        count: count,
+        type: type
+      }),
+    };
+
+    const response = await fetch(constants.drillsCreateRecordEndpoint, options);
+
+    if (response.ok) {
+      const jsonObj = await response.json();
+      return jsonObj;
+    } else {
+      return null;
+    }
+  },
+
   setWithExpiry(key, value, ttl) {
     const now = new Date()
   

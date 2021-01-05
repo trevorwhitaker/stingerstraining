@@ -7,7 +7,8 @@ const constants = {
   createCategoryEndpoint: '/categories/create',
   createDrillEndpoint: '/drills/create',
   logoutEndpoint: '/users/logout',
-  isAdminEndpoint: '/users/isAdmin'
+  isAdminEndpoint: '/users/isAdmin',
+  drillsCreateRecordEndpoint: '/drills/createRecord'
 }
 
 export default constants;
