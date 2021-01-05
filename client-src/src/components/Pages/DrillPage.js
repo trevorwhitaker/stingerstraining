@@ -54,7 +54,7 @@ const DrillPage = ({ drill }) => {
       <div className='drill-page__description'>{data.drill.description}</div>
       <hr></hr>
       <Form onSubmit={(e) => handleCategorySubmit(e)}>
-                    <Form.Group controlId='addReps.count'>
+                    <Form.Group controlId='addReps.count' className="add-reps-count">
                       <Form.Label>Count</Form.Label>
                       <Form.Control
                         as='input'
@@ -62,7 +62,7 @@ const DrillPage = ({ drill }) => {
                         onChange={(e) => setCount(e.target.value)}
                       />
                     </Form.Group>
-                    <Form.Group controlId='addReps.type'>
+                    <Form.Group controlId='addReps.type' className="add-reps-type">
                       <Form.Label>Type</Form.Label>
                       <Form.Control as="select"
                         value={type}
@@ -71,6 +71,7 @@ const DrillPage = ({ drill }) => {
                         <option>Minutes</option>
                       </Form.Control>
                     </Form.Group>
+                    <div className="add-reps-submit">
                     <Button
                       block
                       size='lg'
@@ -80,6 +81,7 @@ const DrillPage = ({ drill }) => {
                     >
                       Add Reps
                     </Button>
+                    </div>
                   </Form>
        <Table striped bordered hover className="rep-table">
        <thead>
