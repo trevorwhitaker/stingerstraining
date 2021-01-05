@@ -9,22 +9,19 @@ import util from '../../util/utils';
 import './DrillPage.scss';
 
 const DrillPage = ({ drill }) => {
-
   const [data, setData] = useState(null);
   const [count, setCount] = useState(0);
   const [type, setType] = useState('Reps');
 
   useEffect(() => {
     let mounted = true;
-    const getContent = async () => {
-      const data = await util.getDrillByName(drill);
-      if (mounted) {
-        setData(data);
-      }
+    const getInitialData = async () => {
+      const initialData = await util.getDrillByName(drill);
+      setData(initialData);
     };
-    getContent();
-    return () => mounted = false;
-  }, [drill]);
+
+    if (!data && mounted) getInitialData();
+  });
 
     // Validate category data before enabling submit button
     const validateCategoryForm = () => {
@@ -37,12 +34,14 @@ const DrillPage = ({ drill }) => {
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
     const record = await util.createNewRecord(data.drill._id, count, type);
-    setCount(0);
-    setType('Reps');
     let tempData = data;
     tempData.records = record.records;
     setData(tempData);
+    setCount(0);
+    setType('Reps');
   };
+
+  const recordsList = data && data.records && data.records.records ? data.records.records : data ? data.records : [];
 
   return (
     data && <div className='drill-page'>
@@ -91,7 +90,7 @@ const DrillPage = ({ drill }) => {
          </tr>
        </thead>
        <tbody>
-         {data.records && data.records.records.map(record => (
+         {data.records && recordsList.map(record => (
             <tr key={record.date}>
               <td>{new Date(record.date).toLocaleString()}</td>
               <td>{record.count}</td>
