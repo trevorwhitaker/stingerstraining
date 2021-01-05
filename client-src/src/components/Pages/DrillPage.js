@@ -79,7 +79,7 @@ const DrillPage = ({ drill }) => {
                       disabled={!validateCategoryForm()}
                       className="add-rep-button"
                     >
-                      Add Reps
+                      Add
                     </Button>
                     </div>
                   </Form>
