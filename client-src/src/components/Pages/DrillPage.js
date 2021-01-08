@@ -11,6 +11,7 @@ import './DrillPage.scss';
 const DrillPage = ({ drill }) => {
   const [data, setData] = useState(null);
   const [count, setCount] = useState(0);
+  const [sets, setSets] = useState(1);
   const [type, setType] = useState('Reps');
 
   useEffect(() => {
@@ -33,11 +34,12 @@ const DrillPage = ({ drill }) => {
     // submit data to create a new category
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
-    const record = await util.createNewRecord(data.drill._id, count, type);
+    const record = await util.createNewRecord(data.drill._id, sets, count, type);
     let tempData = data;
     tempData.records = record.records;
     setData(tempData);
     setCount(0);
+    setSets(1);
     setType('Reps');
   };
 
@@ -54,8 +56,16 @@ const DrillPage = ({ drill }) => {
       <div className='drill-page__description'>{data.drill.description}</div>
       <hr></hr>
       <Form onSubmit={(e) => handleCategorySubmit(e)}>
+                    <Form.Group controlId='addReps.sets' className="add-reps-count">
+                      <Form.Label>Sets</Form.Label>
+                      <Form.Control
+                        as='input'
+                        value={sets}
+                        onChange={(e) => setSets(e.target.value)}
+                      />
+                    </Form.Group>
                     <Form.Group controlId='addReps.count' className="add-reps-count">
-                      <Form.Label>Count</Form.Label>
+                      <Form.Label>Count Per Set</Form.Label>
                       <Form.Control
                         as='input'
                         value={count}
@@ -87,14 +97,16 @@ const DrillPage = ({ drill }) => {
        <thead>
          <tr>
            <th width='40%'>Date</th>
-           <th width='30%'>Count</th>
-           <th width='30%'>Type</th>
+           <th width='20%'>Sets</th>
+           <th width='20%'>Count</th>
+           <th width='20%'>Type</th>
          </tr>
        </thead>
        <tbody>
          {data.records && recordsList.map(record => (
             <tr key={record.date}>
               <td>{new Date(record.date).toLocaleString()}</td>
+              <td>{record.sets}</td>
               <td>{record.count}</td>
               <td>{record.description}</td>
             </tr>

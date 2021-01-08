@@ -5,6 +5,7 @@ const recordSchema = new mongoose.Schema({
   drill: { type: mongoose.Schema.Types.ObjectId, required: true },
   records : [{
     date : Date,
+    sets: Number,
     count : Number,
     description : String
      }]

@@ -35,6 +35,7 @@ app.use(session({
   saveUninitialized: false,
   secret: process.env.JWT_SECRET,
   store: sessionStore,
+  rolling: true,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24,
     sameSite: true,

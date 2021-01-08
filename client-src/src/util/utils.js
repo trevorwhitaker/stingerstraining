@@ -135,7 +135,7 @@ const util = {
     }
   },
 
-  async createNewRecord(drillId, count, type) {
+  async createNewRecord(drillId, sets, count, type) {
     const loggedIn = this.getWithExpiry('loggedIn');
 
     if (!loggedIn) {
@@ -150,6 +150,7 @@ const util = {
       },
       body: JSON.stringify({
         drillId: drillId,
+        sets: sets,
         count: count,
         type: type
       }),

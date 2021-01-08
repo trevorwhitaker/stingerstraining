@@ -122,7 +122,7 @@ router.delete("/delete", auth, async (req, res) => {
 
 router.post("/createRecord", auth, async (req, res) => {
   try {
-    const { drillId, count, type } = req.body;
+    const { drillId, sets, count, type } = req.body;
     const user = await User.findById(req.user);
     if (!user)
     {
@@ -138,13 +138,14 @@ router.post("/createRecord", auth, async (req, res) => {
 
       existingRecord.records.push({
         date: new Date(),
+        sets: sets,
         count: count,
         description: type
       });
       savedRecord = await existingRecord.save();
     }
     else {
-      const newRecord = new Record({user: userId, drill: drillId, records: [{date: new Date(), count: count, description: type}]});
+      const newRecord = new Record({user: userId, drill: drillId, records: [{date: new Date(), sets: sets, count: count, description: type}]});
       savedRecord = await newRecord.save();
     }
 
