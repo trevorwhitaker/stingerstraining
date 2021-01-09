@@ -78,7 +78,7 @@ const DrillPage = ({ drill }) => {
                         value={type}
                         onChange={(e) => setType(e.target.value)} >
                         <option>Reps</option>
-                        <option>Minutes</option>
+                        <option>Seconds</option>
                       </Form.Control>
                     </Form.Group>
                     <div className="add-reps-submit">
