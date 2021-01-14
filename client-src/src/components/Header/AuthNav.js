@@ -29,6 +29,10 @@ const AuthNav = ({ isLoggedin, isAdmin, setIsLoggedin, onClick }) => {
     <span>
       {isLoggedin === true && (
         <>
+          {isAdmin === true && (<Nav.Item componentClass={Link} to='/admindash' onClick={callOnClick}>
+            Dashboard
+          </Nav.Item>)
+          }
           {isAdmin === true && (<Nav.Item componentClass={Link} to='/upload' onClick={callOnClick}>
             Admin upload
           </Nav.Item>)

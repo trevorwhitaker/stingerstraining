@@ -135,6 +135,58 @@ const util = {
     }
   },
 
+  async getUserList() {
+    const path = constants.getUserListEndpoint;
+    const loggedIn = this.getWithExpiry('loggedIn');
+  
+    if (!loggedIn) {
+      return false;
+    }
+
+    const options = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+  
+    const response = await fetch(path, options);
+
+    if (response.ok) {
+      const jsonObj = await response.json();
+      return jsonObj;
+    } else {
+      return null;
+    }
+  },
+
+  async getRecordsForUser(userId) {
+    const path = `${constants.getRecordsForUserEndpoint}/${userId}`;
+    const loggedIn = this.getWithExpiry('loggedIn');
+  
+    if (!loggedIn) {
+      return false;
+    }
+
+    const options = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+  
+    const response = await fetch(path, options);
+
+    if (response.ok) {
+      const jsonObj = await response.json();
+      return jsonObj;
+    } else {
+      return null;
+    }
+  },
+
   async createNewRecord(drillId, sets, count, type) {
     const loggedIn = this.getWithExpiry('loggedIn');
 

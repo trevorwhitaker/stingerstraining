@@ -1,8 +1,12 @@
 const router = require("express").Router();
 const User = require("../models/userModel");
+const Record = require("../models/recordModel");
+const Drill = require("../models/drillModel");
 const bcrypt = require("bcryptjs");
 const auth = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
+const { Mongoose } = require("mongoose");
+const ObjectId = require('mongoose').Types.ObjectId;
 
 router.post("/register", async (req, res) => {
     try {
@@ -134,5 +138,51 @@ router.get("/isAdmin", auth, async (req, res) => {
   }
 });
 
+router.get("/getAllUsersNoAdmins", auth, async(req, res) => {
+  try {
+    const user = await User.findById(req.user);
+    if (!user || user.role != "admin")
+    {
+      return res
+      .status(401)
+      .json({ msg: "Not authorized." });
+    }
+
+    const allUsers = await User.find({ role: { $ne: "admin" } }, "_id loginDates username");
+
+    return res.json(allUsers);  
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+  router.get("/getRecordsForUser/:userId", async(req, res) => {
+  try {
+    const targetUserId = req.params.userId;
+    const user = await User.findById(req.user);
+    if (!user || user.role != "admin")
+    {
+      return res
+      .status(401)
+      .json({ msg: "Not authorized." });
+    }
+
+    const allRecords = await Record.aggregate([{
+      $match: { user: ObjectId(targetUserId)}
+      }, {
+          $lookup: {
+              from: "drills", // collection to join
+              localField: "drill",//field from the input documents
+              foreignField: "_id",//field from the documents of the "from" collection
+              as: "drill"// output array field
+          },          
+      },
+      {$unwind: '$drill'}, {$project: {"drill.description": 0}}]);
+
+    return res.json(allRecords);  
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = router;
