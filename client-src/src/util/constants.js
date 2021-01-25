@@ -8,7 +8,9 @@ const constants = {
   createDrillEndpoint: '/drills/create',
   logoutEndpoint: '/users/logout',
   isAdminEndpoint: '/users/isAdmin',
-  drillsCreateRecordEndpoint: '/drills/createRecord'
+  drillsCreateRecordEndpoint: '/drills/createRecord',
+  getUserListEndpoint: '/users/getAllUsersNoAdmins',
+  getRecordsForUserEndpoint: '/users/getRecordsForUser'
 }
 
 export default constants;
