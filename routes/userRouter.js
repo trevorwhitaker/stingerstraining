@@ -156,7 +156,7 @@ router.get("/getAllUsersNoAdmins", auth, async(req, res) => {
   }
 });
 
-  router.get("/getRecordsForUser/:userId", async(req, res) => {
+  router.get("/getRecordsForUser/:userId", auth, async(req, res) => {
   try {
     const targetUserId = req.params.userId;
     const user = await User.findById(req.user);
