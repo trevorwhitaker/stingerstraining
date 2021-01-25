@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
+import { Combobox } from 'react-widgets';
+import BootstrapTable from 'react-bootstrap-table-next';
+
 import { SkeletonPlaceholder } from 'carbon-components-react';
 
 import util from '../../util/utils';
@@ -20,6 +23,9 @@ const AdminDashboard = () => {
   const [drillName, setDrillName] = useState('');
   const [drillDesc, setDrillDesc] = useState('');
   const [drillVideoFile, setDrillVideoFile] = useState(null);
+
+  const [users, setUsers] = useState({});
+  const [processedTableData, setProcessedTableData] = useState();
 
   const [drillUploadSuccess, setDrillUploadSuccess] = useState(null);
   const [drillUploadError, setDrillUploadError] = useState(null);
@@ -42,6 +48,9 @@ const AdminDashboard = () => {
             return { label: category.label, checked: false };
           })
         );
+
+        const userlist = await util.getUserList();
+        setUsers(userlist);
       }
     };
     check();
@@ -76,7 +85,7 @@ const AdminDashboard = () => {
     const options = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         label: categoryLabel,
@@ -99,11 +108,9 @@ const AdminDashboard = () => {
         setCategoryUploadError('no response');
         setCategoryUploadSuccess(false);
       }
-  
+
       setCategoryUploadWait(false);
     }, 1500);
-
-
   };
 
   // submit data to create a new drill
@@ -129,8 +136,7 @@ const AdminDashboard = () => {
 
     const options = {
       method: 'POST',
-      headers: {
-      },
+      headers: {},
       body: formData,
     };
 
@@ -147,7 +153,7 @@ const AdminDashboard = () => {
             categories.map((category) => {
               return {
                 label: category.label,
-                checked: false
+                checked: false,
               };
             })
           );
@@ -159,10 +165,9 @@ const AdminDashboard = () => {
         setDrillUploadError('no response');
         setDrillUploadSuccess(false);
       }
-  
+
       setDrillUploadWait(false);
     }, 1500);
-
   };
 
   // update state tracking which category is selected for new drill creation
@@ -190,9 +195,80 @@ const AdminDashboard = () => {
     setDrillUploadWait(false);
   };
 
+  const columns = [
+    {
+      dataField: 'date',
+      text: 'Date',
+      sort: true,
+    },
+    {
+      dataField: 'drill',
+      text: 'Drill',
+      sort: true,
+    },
+    {
+      dataField: 'count',
+      text: 'Count',
+      sort: true,
+    },
+    {
+      dataField: 'description',
+      text: 'Type',
+      sort: true,
+    },
+    {
+      dataField: 'sets',
+      text: 'Sets',
+      sort: true,
+    },
+  ];
+
+  const defaultSorted = [{
+    dataField: 'date',
+    order: 'desc'
+  }];
   return (
     <div>
-      <h1>Coolio</h1>
+      <h1>Admin Dashboard</h1>
+      <Combobox
+        data={users}
+        valueField='_id'
+        textField='username'
+        onSelect={async (item) => {
+          const userData = await util.getRecordsForUser(item._id);
+          if (userData) {
+            const processedRecords = [];
+
+            userData.forEach((data) => {
+              const { drill, records } = data;
+              records.forEach((record) => {
+                const dateString = new Date(record.date).toLocaleDateString();
+
+                processedRecords.push({
+                  date: dateString,
+                  sets: record.sets,
+                  count: record.count,
+                  description: record.description,
+                  id: record.id,
+                  drill: drill.name,
+                  categories: drill.categories,
+                });
+              });
+            });
+
+            setProcessedTableData(processedRecords);
+          }
+        }}
+      />
+      <div>
+        {processedTableData?.length > 0 && <BootstrapTable
+          bootstrap4
+          keyField='id'
+          data={processedTableData}
+          columns={columns}
+          defaultSorted={ defaultSorted }
+        />}
+      </div>
     </div>
   );
 };
