@@ -198,13 +198,6 @@ export default class ThunderPage extends React.Component {
       newArray[targetIndex] = temporaryValue;
     }
 
-    const newNewArray = [];
-    let count = 0;
-    
-    while (count < newArray.length) {
-      newNewArray.push("meat");
-      count++;
-    }
     this.setState({players: newNewArray});
   }
 
