@@ -198,7 +198,7 @@ export default class ThunderPage extends React.Component {
       newArray[targetIndex] = temporaryValue;
     }
 
-    this.setState({players: newNewArray});
+    this.setState({players: newArray});
   }
 
   render() {
