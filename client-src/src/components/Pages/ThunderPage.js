@@ -59,9 +59,13 @@ export default class ThunderPage extends React.Component {
             document.getElementById(this.state.players[this.state.currentActive]).className = 'not-active';
           }
           
-          this.setState({ currentActive: (this.state.currentActive + 1) % this.state.players.length});
+          let prev = this.state.players[tempCurrentActive];
+          let tempCurrentActive = (tempCurrentActive + 1) % this.state.players.length;
+          let next = this.state.players[tempCurrentActive];
+          console.log([prev, next, second]);
+          this.setState({ currentActive: tempCurrentActive });
           this.setState({lastSwitchTime: second});
-          document.getElementById(this.state.players[this.state.currentActive]).className = 'active';
+          document.getElementById(this.state.players[tempCurrentActive]).className = 'active';
         }
       }
 
