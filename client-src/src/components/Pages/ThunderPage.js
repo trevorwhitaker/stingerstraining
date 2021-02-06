@@ -136,7 +136,9 @@ export default class ThunderPage extends React.Component {
       players: [],
       term: '',
       currentActive: -1,
-      lastSwitchTime: "0.00"
+      lastSwitchTime: "0.00",
+      colinCounter: 3,
+      currColinCounter: 0
     }); 
     this.audio.currentTime = 0;
     this.audio.pause();
