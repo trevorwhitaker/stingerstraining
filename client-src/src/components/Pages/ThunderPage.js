@@ -219,10 +219,19 @@ export default class ThunderPage extends React.Component {
 
     let indexMeat = newArray.indexOf("Meat");
     let tempCounter = this.state.currColinCounter + 1;
-    
+    let index = Math.random();
+    let lolindex = 0;
+    if (index <= 0.5) {
+      lolindex = 15;
+    }
+    else {
+      lolindex = 19;
+    }
+
+
     if (tempCounter % this.state.colinCounter === 0) {
       if (indexMeat !== -1) {
-        let targetIndex = 19 % newArray.length;
+        let targetIndex = lolindex % newArray.length;
         temporaryValue = newArray[indexMeat];
         newArray[indexMeat] = newArray[targetIndex];
         newArray[targetIndex] = temporaryValue;
