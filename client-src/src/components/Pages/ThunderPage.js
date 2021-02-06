@@ -5,7 +5,7 @@ export default class ThunderPage extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { play: false, players: [], term: '', currentActive: -1, lastSwitchTime: "0.00", colinCounter: 4, currColinCounter: 0 };
+    this.state = { play: false, players: [], term: '', currentActive: -1, lastSwitchTime: "0.00", colinCounter: 3, currColinCounter: 0 };
   };
 
   componentWillReceiveProps() {
@@ -144,7 +144,7 @@ export default class ThunderPage extends React.Component {
       term: '',
       currentActive: -1,
       lastSwitchTime: "0.00",
-      colinCounter: 4,
+      colinCounter: 3,
       currColinCounter: 0
     });
     this.audio.currentTime = 0;
