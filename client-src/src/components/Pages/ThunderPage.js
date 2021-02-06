@@ -5,7 +5,7 @@ export default class ThunderPage extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { play: false, players: [], term: '', currentActive: -1, lastSwitchTime: "0.00" };
+    this.state = { play: false, players: [], term: '', currentActive: -1, lastSwitchTime: "0.00", colinCounter: 4, currColinCounter: 0 };
   };
 
   componentWillReceiveProps() {
@@ -88,6 +88,11 @@ export default class ThunderPage extends React.Component {
     }
   };
 
+  increaseColinCounter = () => {
+    let temp = this.state.colinCounter;
+    this.setState({ colinCounter: temp + 1 });
+  };
+
   positionHandleMouse = (position) => {
     let timelineWidth = this.timeline.offsetWidth - this.handle.offsetWidth;
 
@@ -132,6 +137,23 @@ export default class ThunderPage extends React.Component {
     this.audio.currentTime = 0;
     this.audio.pause();
   }
+
+  resetGame = () => {
+    this.setState({
+      play: false,
+      term: '',
+      currentActive: -1,
+      lastSwitchTime: "0.00",
+      colinCounter: 4,
+      currColinCounter: 0
+    });
+    this.audio.currentTime = 0;
+    this.audio.pause();
+
+    for (let i = 0; i < this.state.players.length; i++) {
+      document.getElementById(this.state.players[i]).className = 'not-active';
+    }
+  };
 
   play = () => {
     if (this.state.play) {
@@ -189,21 +211,25 @@ export default class ThunderPage extends React.Component {
       newArray[randomIndex] = temporaryValue;
     }
 
-    let indexMeat = newArray.indexOf("Callin");
-
-    if (indexMeat !== -1) {
-      let targetIndex = 19 % newArray.length;
-      temporaryValue = newArray[indexMeat];
-      newArray[indexMeat] = newArray[targetIndex];
-      newArray[targetIndex] = temporaryValue;
+    let indexMeat = newArray.indexOf("Meat");
+    let tempCounter = this.state.currColinCounter + 1;
+    
+    if (tempCounter % this.state.colinCounter === 0) {
+      if (indexMeat !== -1) {
+        let targetIndex = 19 % newArray.length;
+        temporaryValue = newArray[indexMeat];
+        newArray[indexMeat] = newArray[targetIndex];
+        newArray[targetIndex] = temporaryValue;
+      }
     }
 
-    this.setState({players: newArray});
+
+    this.setState({players: newArray, currColinCounter: tempCounter});
   }
 
   render() {
     return <div className="thunder-main">
-      <h1 className="thunder-header">Thunderstruck</h1>
+      <h1 className="thunder-header" onClick={this.increaseColinCounter}>Thunderstruck</h1>
       <audio src={thunderstruck}
         ref={(audio) => { this.audio = audio }}
       />
@@ -211,7 +237,8 @@ export default class ThunderPage extends React.Component {
       <div id="timeline" onClick={this.mouseMove} ref={(timeline) => { this.timeline = timeline }}>
         <div id="handle" onMouseDown={this.mouseDown} ref={(handle) => { this.handle = handle }} />
       </div>
-      <button className="reset-button" onClick={this.clearGame}>Reset</button>
+      <button className="clear-button" onClick={this.clearGame}>Clear</button>
+      <button className="reset-button" onClick={this.resetGame}>Reset</button>
       <button className="shuffle-button" onClick={this.shuffleNames}>Shuffle</button>
       <form onSubmit={this.onSubmit} className="name-enter">
           <input value={this.state.term} onChange={this.onChange} />
